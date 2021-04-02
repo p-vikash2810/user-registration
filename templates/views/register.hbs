@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{>headerLink}}
+</head>
+
+<body>
+    {{>navbar}}
+    <div class="main_div">
+        <div class="box">
+            <h1>Registration Form</h1>
+            <form action="/register" method="POST">
+                <div class="input-box">
+                    <input type="text" name="firstName" id="name" autocomplete="off" required />
+                    <label for="FirstName">firstName</label>
+                </div>
+                <div class="input-box">
+                    <input type="text" name="lastName" id="name" autocomplete="off" required />
+                    <label for="lastName">LastName</label>
+                </div>
+                <div class="input-box">
+                    <input type="text" name="email" id="name" autocomplete="off" required />
+                    <label for="email">email</label>
+                </div>
+                <div class="input-box">
+                    <input type="text" name="userName" id="name" autocomplete="off" required />
+                    <label for="userName">Username</label>
+                </div>
+                <div class="input-box">
+                    <input type="number" name="phoneNumber" id="name" autocomplete="off" required />
+                    <label for="phoneNumber">Phone</label>
+                </div>
+                <div class="input-box">
+                    <input type="text" name="age" id="name" autocomplete="off" required />
+                    <label for="age">Age</label>
+                </div>
+                <div class="input-box">
+                    <input type="password" name="password" id="name" autocomplete="off" required />
+                    <label for="Password">Password</label>
+                </div>
+                <div class="input-box">
+                    <input type="password" name="confirmPassword" id="name" autocomplete="off" required />
+                    <label for="confirmPassword">confirmPassword</label>
+                </div>
+                <input type="submit" value="Register" />
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
