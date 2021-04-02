@@ -4,6 +4,7 @@ require("./db/connection");
 const path = require("path");
 const hbs = require("hbs");
 const Register = require("./model/register");
+const cookieParser = require("cookie-parser");
 const bcrypt = require("bcryptjs");
 const port = process.env.PORT || 3000;
 
@@ -12,6 +13,7 @@ const templates_path = path.join(__dirname, "../templates/views");
 const partials_path = path.join(__dirname, "../templates/partials");
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(express.static(static_path));
@@ -23,6 +25,12 @@ hbs.registerPartials(partials_path);
 app.get("/", (req, res) => {
   res.render("index");
 });
+
+app.get("/secret", (req, res) => {
+  console.log("this is cookies token", req.cookies.jwt);
+  res.render("secret");
+});
+
 app.get("/login", (req, res) => {
   res.render("login");
 });
@@ -47,6 +55,12 @@ app.post("/register", async (req, res) => {
       });
 
       const token = await registerEmployee.generateAuthToken();
+
+      res.cookie("jwt", token, {
+        expires: new Date(Date.now() + 3000),
+        httpOnly: true,
+      });
+      // console.log(cookies);
       const registered = await registerEmployee.save();
       res.status(201).render("login");
     } else {
@@ -67,6 +81,10 @@ app.post("/login", async (req, res) => {
     const token = await userEmail.generateAuthToken();
     console.log(token);
     if (isMatch) {
+      res.cookie("jwt", token, {
+        expires: new Date(Date.now() + 30000),
+        httpOnly: true,
+      });
       res.status(201).render("index");
     } else {
       res.status(400).send("incorrect password");
