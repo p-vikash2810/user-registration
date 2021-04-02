@@ -5,6 +5,8 @@ const path = require("path");
 const hbs = require("hbs");
 const Register = require("./model/register");
 const cookieParser = require("cookie-parser");
+
+const auth = require("./middleware/auth");
 const bcrypt = require("bcryptjs");
 const port = process.env.PORT || 3000;
 
@@ -26,9 +28,33 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-app.get("/secret", (req, res) => {
+app.get("/secret", auth, (req, res) => {
   console.log("this is cookies token", req.cookies.jwt);
   res.render("secret");
+});
+
+app.get("/logout", auth, async (req, res) => {
+  try {
+    console.log("logout api called");
+
+    // logout single user
+    // req.user.tokens = req.user.tokens.filter((currElement) => {
+    //   return currElement.token !== req.token;
+    // });
+
+    // logout all users
+    req.user.tokens = [];
+    console.log("token deleted from database");
+
+    res.clearCookie("jwt");
+    console.log("cookie clear");
+
+    await req.user.save();
+    console.log("res save");
+    res.render("login");
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });
 
 app.get("/login", (req, res) => {
